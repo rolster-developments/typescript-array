@@ -43,5 +43,9 @@
     "type": "git",
     "url": "https://github.com/rolster-developments/typescript-array.git"
   },
-  "keywords": ["rolster", "typescript", "array"]
+  "keywords": [
+    "rolster",
+    "typescript",
+    "array"
+  ]
 }
