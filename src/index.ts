@@ -13,6 +13,8 @@ interface MapReduce<E, V> {
   reducer: (element: E, currentValue: V) => void;
 }
 
+type Reducer<T, V> = (value: T) => V;
+
 class ForEachBreakException<T> extends Error {
   constructor(
     public readonly element: T,
@@ -38,14 +40,25 @@ export const pushElement = <T>(array: T[], element: T): T[] => {
   return [...array, element];
 };
 
-export const changeElement = <T>(array: T[], old: T, element: T): T[] => {
-  return array.map((value) => (value === old ? element : value));
+export const updateElement = <T>(
+  array: T[],
+  element: T,
+  reducer: (element: T) => boolean
+): T[] => {
+  return array.map((currentElement) =>
+    reducer(currentElement) ? element : currentElement
+  );
 };
 
-export const removeElement = <T>(array: T[], value: number | T): T[] => {
-  return array.filter((element, index) =>
-    typeof value === 'number' ? value !== index : element !== value
-  );
+export const removeElement = <T>(
+  array: T[],
+  reducer: (element: T) => boolean
+): T[] => {
+  return array.filter((currentElement) => reducer(currentElement));
+};
+
+export const removeIndex = <T>(array: T[], indexElement: number): T[] => {
+  return array.filter((_, index) => indexElement !== index);
 };
 
 export const arrayEach = <T>(props: EachArray<T>): boolean => {
@@ -69,8 +82,6 @@ export const arrayEach = <T>(props: EachArray<T>): boolean => {
     return false;
   }
 };
-
-type Reducer<T, V> = (value: T) => V;
 
 export const reduceDistinct = <T, V>(
   array: T[],
