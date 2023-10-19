@@ -54,7 +54,7 @@ export const removeElement = <T>(
   array: T[],
   reducer: (element: T) => boolean
 ): T[] => {
-  return array.filter((currentElement) => reducer(currentElement));
+  return array.filter((currentElement) => !reducer(currentElement));
 };
 
 export const removeIndex = <T>(array: T[], indexElement: number): T[] => {
