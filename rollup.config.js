@@ -6,7 +6,7 @@ const plugins = [
   commonjs(),
   resolve(),
   typescript({
-    tsconfig: './tsconfig.json',
+    tsconfig: './tsconfig.app.json',
     declaration: true,
     declarationDir: 'dist',
     include: ['node_modules/@rolster/types/index.d.ts']
