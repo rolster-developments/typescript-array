@@ -1,15 +1,15 @@
-type CallEach = <T>(el: T, index: number) => Undefined<boolean>;
-type CallStop = <T>(el: T, index: number) => void;
+type EachCallback = <T>(element: T, index: number) => Undefined<boolean>;
+type EachError = <T>(element: T, index: number) => void;
 
-interface EachArray<T> {
+interface ArrayEachOptions<T> {
   array: T[];
-  each: CallEach;
-  stop?: CallStop;
+  each: EachCallback;
+  catchError?: EachError;
 }
 
-interface MapReduce<E, V> {
-  identifier: (element: E) => string;
+interface MapOptions<E, V> {
   factory: (element: E) => V;
+  identifier: (element: E) => string;
   reducer: (element: E, currentValue: V) => void;
 }
 
@@ -24,45 +24,45 @@ class ForEachBreakException<T> extends Error {
   }
 }
 
-export const inArray = <T>(array: T[], element: T): boolean => {
+export function inArray<T>(array: T[], element: T): boolean {
   return array.indexOf(element) !== -1;
-};
+}
 
-export const firstElement = <T>(array: T[]): Nulleable<T> => {
+export function firstElement<T>(array: T[]): Nulleable<T> {
   return array.length === 0 ? null : array[0];
-};
+}
 
-export const lastElement = <T>(array: T[]): Nulleable<T> => {
+export function lastElement<T>(array: T[]): Nulleable<T> {
   return array.length === 0 ? null : array[array.length - 1];
-};
+}
 
-export const pushElement = <T>(array: T[], element: T): T[] => {
+export function pushElement<T>(array: T[], element: T): T[] {
   return [...array, element];
-};
+}
 
-export const updateElement = <T>(
+export function replaceElement<T>(
   array: T[],
   element: T,
-  reducer: (element: T) => boolean
-): T[] => {
+  criteria: (element: T) => boolean
+): T[] {
   return array.map((currentElement) =>
-    reducer(currentElement) ? element : currentElement
+    criteria(currentElement) ? element : currentElement
   );
-};
+}
 
-export const removeElement = <T>(
+export function removeElement<T>(
   array: T[],
-  reducer: (element: T) => boolean
-): T[] => {
-  return array.filter((currentElement) => !reducer(currentElement));
-};
+  criteria: (element: T) => boolean
+): T[] {
+  return array.filter((currentElement) => !criteria(currentElement));
+}
 
-export const removeIndex = <T>(array: T[], indexElement: number): T[] => {
-  return array.filter((_, index) => indexElement !== index);
-};
+export function removeIndex<T>(array: T[], index: number): T[] {
+  return array.filter((_, currentIndex) => index !== currentIndex);
+}
 
-export const arrayEach = <T>(props: EachArray<T>): boolean => {
-  const { array, each, stop } = props;
+export function arrayEach<T>(options: ArrayEachOptions<T>): boolean {
+  const { array, each: each, catchError: stop } = options;
 
   try {
     array.forEach((element, index) => {
@@ -81,12 +81,9 @@ export const arrayEach = <T>(props: EachArray<T>): boolean => {
 
     return false;
   }
-};
+}
 
-export const reduceDistinct = <T, V>(
-  array: T[],
-  reducer: Reducer<T, V>
-): V[] => {
+export function reduceDistinct<T, V>(array: T[], reducer: Reducer<T, V>): V[] {
   return array.reduce((result: V[], element) => {
     const value = reducer(element);
 
@@ -96,10 +93,10 @@ export const reduceDistinct = <T, V>(
 
     return result;
   }, []);
-};
+}
 
-export const mapToReduce = <E, V>(array: E[], props: MapReduce<E, V>): V[] => {
-  const { factory, identifier, reducer } = props;
+export function mapToReduce<E, V>(array: E[], options: MapOptions<E, V>): V[] {
+  const { factory, identifier, reducer } = options;
 
   const collection = new Map<string, V>();
 
@@ -124,4 +121,4 @@ export const mapToReduce = <E, V>(array: E[], props: MapReduce<E, V>): V[] => {
   });
 
   return Array.from(collection.entries()).map(([_, value]) => value);
-};
+}
