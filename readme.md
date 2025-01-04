@@ -1,11 +1,11 @@
-# Rolster Helpers Array
+# Rolster Array Utilities
 
 Utility package for manipulating Array compatible with Typescript projects.
 
 ## Installation
 
 ```
-npm i @rolster/helpers-array
+npm i @rolster/arrays
 ```
 
 ## Configuration
