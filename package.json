@@ -35,7 +35,7 @@
     "prepublishOnly": "npm run build"
   },
   "devDependencies": {
-    "@rolster/rollup": "^1.0.10",
+    "@rolster/rollup": "^1.1.0",
     "@rolster/types": "^1.1.0",
     "@vitest/ui": "^3.2.4",
     "jsdom": "^27.0.0",
