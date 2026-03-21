@@ -22,5 +22,5 @@
     "types": ["vitest/globals"]
   },
   "files": ["node_modules/@rolster/types/index.d.ts"],
-  "include": ["src/**/*.ts", "src/**/*.spec.ts"]
+  "include": ["src/**/*.ts", "src/**/*.spec.ts", "src/index.ts"]
 }
