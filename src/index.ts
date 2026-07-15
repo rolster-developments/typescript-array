@@ -82,7 +82,9 @@ export function reduceDistinct<T, V>(array: T[], reducer: Reducer<T, V>): V[] {
   return array.reduce((result: V[], element) => {
     const value = reducer(element);
 
-    !result.includes(value) && result.push(value);
+    if (!result.includes(value)) {
+      result.push(value);
+    }
 
     return result;
   }, []);
